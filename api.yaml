@@ -1,0 +1,150 @@
+openapi: 3.0.0
+info:
+  title: MiniMax Chat Completions API
+  version: 1.0.0
+  description: 用于调用 MiniMax 多模态大模型（如 MiniMax-M3）的接口文档。支持流式输出及混合文本与图片的输入。
+servers:
+  - url: https://api.minimaxi.com/anthropic/v1
+    description: 生产环境服务器
+paths:
+  /messages:
+    post:
+      summary: 创建消息对话 (Chat Completions)
+      description: 发送对话上下文（支持文本和图片），获取模型的流式或非流式回复。
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - model
+                - messages
+              properties:
+                model:
+                  type: string
+                  description: 模型名称
+                  example: MiniMax-M3
+                messages:
+                  type: array
+                  description: 对话消息列表
+                  items:
+                    type: object
+                    required:
+                      - role
+                      - content
+                    properties:
+                      role:
+                        type: string
+                        enum: [user, assistant, system]
+                        description: 角色名称
+                        example: user
+                      content:
+                        type: array
+                        description: 消息内容列表，可包含文本与图片
+                        items:
+                          oneOf:
+                            - $ref: '#/components/schemas/TextContent'
+                            - $ref: '#/components/schemas/ImageContent'
+                stream:
+                  type: boolean
+                  description: 是否使用流式返回
+                  example: true
+                max_tokens:
+                  type: integer
+                  description: 生成的最大 Token 数
+                  example: 500
+                thinking:
+                  type: object
+                  description: 思考过程配置
+                  properties:
+                    type:
+                      type: string
+                      enum: [adaptive, disabled, enabled]
+                      description: 思考模式类型
+                      example: adaptive
+      responses:
+        '200':
+          description: 请求成功。注意：若开启 stream=true，响应将以 Server-Sent Events (SSE) 流式返回。
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 非流式状态下的返回对象示例（具体字段可根据 MiniMax 官方实际响应微调）
+                properties:
+                  id:
+                    type: string
+                  type:
+                    type: string
+                    example: message
+                  role:
+                    type: string
+                    example: assistant
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          example: text
+                        text:
+                          type: string
+                          example: "这是一张包含..."
+        '401':
+          description: 未授权，Token 无效或过期。
+        '500':
+          description: 服务器内部错误。
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: |
+        请输入你的 MiniMax API Key。
+        示例值：
+  
+  schemas:
+    TextContent:
+      type: object
+      required:
+        - type
+        - text
+      properties:
+        type:
+          type: string
+          enum: [text]
+          example: text
+        text:
+          type: string
+          description: 文本问题或指令
+          example: 这张图片的内容是什么？
+          
+    ImageContent:
+      type: object
+      required:
+        - type
+        - source
+      properties:
+        type:
+          type: string
+          enum: [image]
+          example: image
+        source:
+          type: object
+          required:
+            - type
+            - url
+          properties:
+            type:
+              type: string
+              enum: [url]
+              example: url
+            url:
+              type: string
+              format: uri
+              description: 图片的公网可访问 URL 地址
+              example: https://filecdn.minimax.chat/public/fe9d04da-f60e-444d-a2e0-18ae743add33.jpeg
