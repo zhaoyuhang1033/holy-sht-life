@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useGame } from '../context/GameContext';
 import { AttributeBar } from './AttributeBar';
 import { Typewriter } from './Typewriter';
@@ -8,12 +8,6 @@ export function PlayScreen() {
   const { attributes, currentTurnData, isLoading, isStreaming, streamingStory, lastTurnWasStreamed, makeChoice } = useGame() as any;
   const [typewriterComplete, setTypewriterComplete] = useState(false);
   const [attributeChanges, setAttributeChanges] = useState<Record<string, number>>({});
-  const [bufferedStory, setBufferedStory] = useState('');
-  const queueRef = useRef('');
-  const displayedLengthRef = useRef(0);
-  const timerRef = useRef<number | null>(null);
-  const isStreamingRef = useRef(false);
-
 
   useEffect(() => {
     if (currentTurnData) {
@@ -23,49 +17,6 @@ export function PlayScreen() {
       return () => clearTimeout(timer);
     }
   }, [currentTurnData, lastTurnWasStreamed]);
-
-  useEffect(() => {
-    isStreamingRef.current = isStreaming;
-  }, [isStreaming]);
-
-  useEffect(() => {
-    if (streamingStory.length < displayedLengthRef.current) {
-      displayedLengthRef.current = 0;
-      queueRef.current = '';
-      setBufferedStory('');
-    }
-    const delta = streamingStory.slice(displayedLengthRef.current);
-    if (delta) {
-      queueRef.current += delta;
-      displayedLengthRef.current = streamingStory.length;
-    }
-    if (!timerRef.current) {
-      timerRef.current = window.setInterval(() => {
-        if (!queueRef.current) {
-          if (!isStreamingRef.current && timerRef.current) {
-            window.clearInterval(timerRef.current);
-            timerRef.current = null;
-          }
-          return;
-        }
-        const chunk = queueRef.current.slice(0, 2);
-        queueRef.current = queueRef.current.slice(2);
-        setBufferedStory(prev => prev + chunk);
-      }, 24);
-    }
-    if (!isStreaming && !queueRef.current && timerRef.current) {
-      window.clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-  }, [isStreaming, streamingStory]);
-
-
-
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) window.clearInterval(timerRef.current);
-    };
-  }, []);
 
   if (!currentTurnData) {
     return <div className="h-screen flex items-center justify-center bg-slate-950 text-slate-100"><p className="text-xl">加载中...</p></div>;
@@ -89,13 +40,11 @@ export function PlayScreen() {
 
         {isStreaming ? (
           <div>
-            <p className="text-slate-100 leading-relaxed whitespace-pre-wrap">{bufferedStory}</p>
+            <p className="text-slate-100 leading-relaxed whitespace-pre-wrap">{streamingStory}</p>
             <motion.span animate={{ opacity: [0.2, 1, 0.2] }} transition={{ duration: 0.8, repeat: Infinity }} className="inline-block mt-2 text-purple-400">
               ▋ 因果律正在书写...
             </motion.span>
           </div>
-        ) : lastTurnWasStreamed ? (
-          <p className="text-slate-100 leading-relaxed whitespace-pre-wrap">{currentTurnData.story}</p>
         ) : (
           <Typewriter text={currentTurnData.story} speed={30} onComplete={() => setTypewriterComplete(true)} />
         )}
