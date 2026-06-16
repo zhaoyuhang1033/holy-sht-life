@@ -45,6 +45,8 @@ export function PlayScreen() {
               ▋ 因果律正在书写...
             </motion.span>
           </div>
+        ) : lastTurnWasStreamed ? (
+          <p className="text-slate-100 leading-relaxed whitespace-pre-wrap">{currentTurnData.story}</p>
         ) : (
           <Typewriter text={currentTurnData.story} speed={30} onComplete={() => setTypewriterComplete(true)} />
         )}
