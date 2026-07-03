@@ -2,25 +2,14 @@ import { Talent, TurnData, Attribute } from '../types';
 
 const API_BASE_URL = 'http://localhost:8000/api';
 
-// 获取随机天赋（静态库）
-export async function fetchTalents(count: number = 10): Promise<Talent[]> {
-  const response = await fetch(`${API_BASE_URL}/talents?count=${count}`);
-  if (!response.ok) {
-    throw new Error('获取天赋失败');
-  }
-  return response.json();
-}
-
-// 获取AI动态生成的天赋
 export async function fetchAITalents(): Promise<Talent[]> {
   const response = await fetch(`${API_BASE_URL}/talents/ai`);
   if (!response.ok) {
-    throw new Error('AI生成天赋失败');
+    throw new Error('AI talent generation failed');
   }
   return response.json();
 }
 
-// 开始游戏
 export async function startGame(
   selectedTalents: Talent[],
   allocatedPoints: Attribute,
@@ -39,38 +28,12 @@ export async function startGame(
   });
 
   if (!response.ok) {
-    throw new Error('开始游戏失败');
+    throw new Error('Game start failed');
   }
 
   return response.json();
 }
 
-// 做出选择
-export async function makeChoice(
-  choiceId: string,
-  currentAttributes: Attribute,
-  sessionId: string,
-  choiceText?: string
-): Promise<TurnData> {
-  const response = await fetch(`${API_BASE_URL}/game/choice`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      choice_id: choiceId,
-      current_attributes: currentAttributes,
-      session_id: sessionId,
-      choice_text: choiceText,
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error('提交选择失败');
-  }
-
-  return response.json();
-}
 export interface StreamHandlers {
   onStart?: (payload: { message: string }) => void;
   onDelta?: (payload: { text: string }) => void;
@@ -99,7 +62,7 @@ export async function makeChoiceStream(
   });
 
   if (!response.ok || !response.body) {
-    throw new Error('流式提交选择失败');
+    throw new Error('Streaming choice request failed');
   }
 
   const reader = response.body.getReader();
@@ -130,6 +93,3 @@ export async function makeChoiceStream(
     }
   }
 }
-
-
-

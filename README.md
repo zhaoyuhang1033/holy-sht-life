@@ -171,7 +171,45 @@
 
 ---
 
-## 8. 当前方向与后续扩展
+## 8. 启动项目
+
+### 8.1 启动后端
+PowerShell / Windows:
+```powershell
+cd backend
+.\venv313\Scripts\python.exe -m pip install -r requirements.txt
+.\venv313\Scripts\python.exe -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+如果是在 macOS / Linux 环境中使用 `python3`：
+```bash
+cd backend
+python3 -m venv venv313
+source venv313/bin/activate
+python3 -m pip install -r requirements.txt
+python3 -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+后端接口文档：
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
+
+### 8.2 启动前端
+```bash
+npm install
+npm run dev
+```
+
+前端默认访问地址：
+- http://localhost:3000
+
+### 8.3 构建前端
+```bash
+npm run build
+```
+---
+
+## 9. 当前方向与后续扩展
 ### 已实现
 - React H5 单屏体验
 - AI 天赋生成

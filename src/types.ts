@@ -44,7 +44,6 @@ export interface GameContextType {
   streamingStory: string;
 
 
-  rerollTalents: () => void;
   rerollAITalents: () => void;
   toggleSelectTalent: (talent: Talent) => void;
   confirmTalents: () => void;

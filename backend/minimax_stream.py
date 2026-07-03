@@ -3,7 +3,7 @@ from typing import AsyncGenerator, Dict, Optional
 
 import httpx
 
-MINIMAX_API_KEY = ""
+MINIMAX_API_KEY = "YOUR_MINIMAX_API_KEY"
 MINIMAX_API_URL = "https://api.minimaxi.com/anthropic/v1/messages"
 MODEL_NAME = "MiniMax-M3"
 

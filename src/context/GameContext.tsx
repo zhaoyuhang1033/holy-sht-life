@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useCallback } from 'react';
 
 
 import { GameContextType, GameStep, Talent, Attribute, TurnData } from '../types';
-import { fetchTalents, fetchAITalents, startGame, makeChoiceStream } from '../api/gameApi';
+import { fetchAITalents, startGame, makeChoiceStream } from '../api/gameApi';
 
 
 import { useVibrate } from '../hooks/useVibrate';
@@ -43,22 +43,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
 
   const { vibrateLight, vibrateMedium, vibrateHeavy } = useVibrate();
-
-  // 天赋重抽（静态库）
-  const rerollTalents = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const talents = await fetchTalents(10);
-      setTalents(talents);
-      setSelectedTalents([]);
-      vibrateLight();
-    } catch (error) {
-      console.error('获取天赋失败:', error);
-      alert('获取天赋失败，请检查后端服务是否启动');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [vibrateLight]);
 
   // AI抽卡（动态生成）
   const rerollAITalents = useCallback(async () => {
@@ -276,7 +260,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     historyLog,
     currentTurnData,
     isLoading,
-    rerollTalents,
     rerollAITalents,
     toggleSelectTalent,
     confirmTalents,

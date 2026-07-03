@@ -5,7 +5,7 @@ import { AttributeBar } from './AttributeBar';
 import { Typewriter } from './Typewriter';
 
 export function PlayScreen() {
-  const { attributes, currentTurnData, isLoading, isStreaming, streamingStory, lastTurnWasStreamed, makeChoice } = useGame() as any;
+  const { attributes, currentTurnData, isLoading, isStreaming, streamingStory, lastTurnWasStreamed, makeChoice } = useGame();
   const [typewriterComplete, setTypewriterComplete] = useState(false);
   const [attributeChanges, setAttributeChanges] = useState<Record<string, number>>({});
 
