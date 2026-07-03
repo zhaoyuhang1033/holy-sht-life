@@ -173,30 +173,32 @@
 
 ## 8. 启动项目
 
-### 8.1 启动后端
-PowerShell / Windows:
-```powershell
-cd backend
-.\venv313\Scripts\python.exe -m pip install -r requirements.txt
-.\venv313\Scripts\python.exe -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
+需要同时运行后端和前端（两个终端窗口）。
 
-如果是在 macOS / Linux 环境中使用 `python3`：
+### 8.1 启动后端（终端 1）
+
 ```bash
 cd backend
-python3 -m venv venv313
-source venv313/bin/activate
-python3 -m pip install -r requirements.txt
-python3 -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+# 首次使用需要安装依赖
+source venv313/Scripts/activate
+pip install -r requirements.txt
+
+# 启动后端服务
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 后端接口文档：
 - Swagger UI: http://localhost:8000/docs
 - ReDoc: http://localhost:8000/redoc
 
-### 8.2 启动前端
+### 8.2 启动前端（终端 2，在项目根目录）
+
 ```bash
+# 首次使用需要安装依赖
 npm install
+
+# 启动前端开发服务器
 npm run dev
 ```
 
@@ -204,6 +206,7 @@ npm run dev
 - http://localhost:3000
 
 ### 8.3 构建前端
+
 ```bash
 npm run build
 ```
