@@ -5,8 +5,12 @@ from typing import List
 from models import Talent
 from pydantic import BaseModel, Field
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # MiniMax API 配置
-MINIMAX_API_KEY = "YOUR_MINIMAX_API_KEY"
+MINIMAX_API_KEY = os.getenv("MINIMAX_API_KEY", "")
 MINIMAX_API_URL = "https://api.minimaxi.com/anthropic/v1/messages"
 
 # 用于严格解析的 Pydantic 模型
