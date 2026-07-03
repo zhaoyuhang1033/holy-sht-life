@@ -56,7 +56,7 @@ def get_random_talents_from_ai() -> List[Talent]:
                     "content": [
                         {
                             "type": "text",
-                            "text": f"{system_prompt}\n\n现在请立刻为我生成 10 个全新的、充满互联网梗和职场地狱笑话的奇葩转生天赋。直接输出JSON，不要任何markdown标记。"
+                            "text": f"{system_prompt}\n\n现在请立刻为我生成 10 个全新的、通用人生主题的奇葩转生天赋。题材可以来自家庭、性格、健康、运气、学习、关系、童年、城市生活、自然灾害、玄学、幻想事件等，不要集中写程序员、互联网公司或职场地狱笑话。直接输出JSON，不要任何markdown标记。"
                         }
                     ]
                 }

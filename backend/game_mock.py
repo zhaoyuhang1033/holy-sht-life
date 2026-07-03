@@ -13,14 +13,14 @@ TALENT_POOL: List[Talent] = [
     Talent(id='t7', name='克苏鲁之子', desc='魔幻度+5，智商+2，但容易遭遇怪事', quality='gold'),
     Talent(id='t8', name='倒霉蛋', desc='运气极差，所有属性-1，但魔幻度+4', quality='black'),
     Talent(id='t9', name='中产阶级', desc='家境+3，情商+1', quality='blue'),
-    Talent(id='t10', name='天选打工人', desc='体质+2，情商+1，注定996', quality='blue'),
+    Talent(id='t10', name='迟钝福星', desc='反应慢半拍，少受即时打击，体质+2，魔幻度+1，情商-1', quality='blue'),
     Talent(id='t11', name='艺术家气质', desc='情商+3，魔幻度+2，但家境-1', quality='purple'),
-    Talent(id='t12', name='赛博朋克', desc='生在霓虹都市，魔幻度+3，智商+1', quality='purple'),
+    Talent(id='t12', name='雨神转世', desc='出门必下雨，魔幻度+3，情商+1，体质-1', quality='purple'),
     Talent(id='t13', name='孤儿', desc='家境-3，但体质+2，智商+2', quality='black'),
     Talent(id='t14', name='天生废物', desc='所有属性-2，但魔幻度+6', quality='black'),
     Talent(id='t15', name='命运之子', desc='所有属性+2', quality='gold'),
     Talent(id='t16', name='时间旅行者', desc='你似乎经历过这一切，魔幻度+4', quality='gold'),
-    Talent(id='t17', name='社畜预备役', desc='天生打工命，体质+1，情商+2', quality='blue'),
+    Talent(id='t17', name='梦里剧透', desc='偶尔梦见未来片段，智商+1，魔幻度+3，但情商-1', quality='blue'),
     Talent(id='t18', name='二次元', desc='沉迷动漫，智商+1，魔幻度+2，情商-2', quality='purple'),
     Talent(id='t19', name='吃货', desc='对美食有执念，体质+2，家境-1', quality='blue'),
     Talent(id='t20', name='夜猫子', desc='昼伏夜出，智商+2，体质-1，魔幻度+1', quality='purple'),
@@ -247,3 +247,4 @@ def get_random_talents(count: int = 10) -> List[Talent]:
 def get_story_data(story_id: str) -> TurnData:
     """获取剧情数据"""
     return STORY_DATABASE.get(story_id, STORY_DATABASE["START"])
+

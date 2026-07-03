@@ -44,6 +44,21 @@ def pick_next_age(current_age: int) -> int:
     return current_age + random.randint(1, 3)
 
 
+def resolve_next_age(current_age: int, time_skip: int, raw_next_age) -> int:
+    if raw_next_age is None:
+        return current_age if time_skip > 0 else pick_next_age(current_age)
+
+    try:
+        next_age = int(raw_next_age)
+    except (TypeError, ValueError):
+        return pick_next_age(current_age)
+
+    if time_skip <= 0 and next_age <= current_age:
+        return pick_next_age(current_age)
+
+    return next_age
+
+
 
 def state_to_turn_data(result_state: dict) -> TurnData:
     return TurnData(
@@ -136,9 +151,7 @@ async def make_choice_stream(request: MakeChoiceRequest):
 
         current_age = int(state.get("age", 0))
         current_world_age = int(state.get("world_age", current_age))
-        next_age = turn_json.get("age")
-        if next_age is None:
-            next_age = current_age if time_skip > 0 else pick_next_age(current_age)
+        next_age = resolve_next_age(current_age, time_skip, turn_json.get("age"))
 
         next_world_age = current_world_age + (time_skip if time_skip > 0 else max(1, int(next_age) - current_age))
 
